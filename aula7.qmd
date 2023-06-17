@@ -1,0 +1,73 @@
+---
+title: "aula7"
+format: html
+---
+
+
+#Transformando os dados
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+mofo <- read_excel("dados-diversos.xlsx", "mofo")
+
+```
+
+```{r}
+mofo |> 
+  ggplot(aes(treat, yld))+
+  geom_col()+
+  facet_wrap(~study)
+```
+
+## Histogram
+
+```{r}
+h <- mofo |> 
+  ggplot(aes(scl))+
+  geom_histogram(bins = 10)
+  
+
+```
+
+```{r}
+b <- mofo |> 
+  ggplot(aes(scl))+
+  geom_boxplot()
+  
+
+```
+
+```{r}
+
+library(patchwork)
+h / b
+```
+
+```{r}
+mofo2 <- mofo 
+ 
+```
+
+```{r}
+h2 <- mofo2 |> 
+  ggplot(aes(yld))+
+  geom_histogram(bins = 10)
+h2
+
+h / h2
+```
+
+```{r}
+survey <- read_excel("dados-diversos.xlsx", "survey")
+
+survey |> 
+  filter(state == "RS") |> 
+  count(species, residue) |> 
+  arrange(n) |> 
+  rename(res = residue) |> 
+  mutate(n_class = case_when(
+          n < 30 ~ "baixa",
+          TRUE ~ "Alta"))
+```

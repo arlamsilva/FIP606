@@ -1,0 +1,80 @@
+---
+title: "aula13"
+author: "ARLAM"
+format: html
+editor_options: 
+  chunk_output_type: inline
+   #| warning: false
+#| message: false
+---
+
+# carrega pacotes
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+estande <- read_excel("C:dados-diversos.xlsx", "estande")
+
+estande |> 
+  ggplot(aes(trat, nplants, group = exp))+
+  geom_point()+
+  #facet_wrap(~exp)+
+  ylim(0,max(estande$nplants))+
+  geom_smooth(se = F, method = "lm")
+
+```
+
+#Modelos mistos
+
+```{r}
+exp1 <- estande |> 
+  filter(exp == 1) 
+m1 <- lm(nplants ~ trat, data = exp1)
+summary(m1)
+
+exp2 <- estande |> 
+  filter(exp == 2) 
+m2 <- lm(nplants ~ trat, data = exp2)
+summary(m2)
+
+exp3 <- estande |> 
+  filter(exp == 3) 
+m3 <- lm(nplants ~ trat, data = exp3)
+summary(m3)
+
+
+g1 <- exp1 |> 
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  geom_abline(intercept = 52.5, 
+              slope = -0.24) +
+    ylim(0, max(estande$nplants))+
+ # geom_smooth(method = "lm", se = F)+
+  theme_bw()+
+  annotate(geom = "text", x = 24,
+           y = 70, label = "y = 52.5 - 0.24x")
+
+g2 <- exp3 |> 
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  ylim(0, max(estande$nplants))+
+  geom_smooth(method = "lm", se = F)+
+  annotate(geom = "text", x = 24,
+           y = 70, label = "y = 52.5 - 0.24x")
+library(patchwork)
+g1 + g2
+```
+
+# 
+
+```{r}
+library(lme4)
+mix <- lmer(nplants ~ trat + (trat | exp), 
+            data = estande)
+summary(mix)
+library(car)
+Anova(mix)
+```
+
+# 

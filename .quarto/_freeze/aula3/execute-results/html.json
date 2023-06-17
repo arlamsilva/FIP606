@@ -1,0 +1,14 @@
+{
+  "hash": "753abd0cc7157fa48c04cc1ad8db8389",
+  "result": {
+    "markdown": "---\ntitle: \"Aula3\"\nauthor: \"ARLAM\"\nformat: html\neditor_options: \n  chunk_output_type: inline\n---\n\n\n# #Dataframe\n\n\\## A função [`data.frame()`](https://rdrr.io/r/base/data.frame.html) cria estruturas cujas colunas podem ser valores numéricos ou caracteres. É uma estrutura muito utilizada em funções do *software R*.\n\n\n::: {.cell hash='aula3_cache/html/unnamed-chunk-1_dc037afa9079bd861c75780b7e6efdff'}\n\n```{.r .cell-code}\nx22 <- data.frame(\n      expand.grid(Ambiente = c(\"A1\", \"A2\"),\n                  Genotipo = c(\"G1\", \"G2\", \"G3\"),\n                  Rep = c(\"I\", \"II\", \"III\")),\n                  Y = rnorm(18, 50, 15))\nstr(x22)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n'data.frame':\t18 obs. of  4 variables:\n $ Ambiente: Factor w/ 2 levels \"A1\",\"A2\": 1 2 1 2 1 2 1 2 1 2 ...\n $ Genotipo: Factor w/ 3 levels \"G1\",\"G2\",\"G3\": 1 1 2 2 3 3 1 1 2 2 ...\n $ Rep     : Factor w/ 3 levels \"I\",\"II\",\"III\": 1 1 1 1 1 1 2 2 2 2 ...\n $ Y       : num  30.5 47.7 75 31.2 43.8 ...\n```\n:::\n\n```{.r .cell-code}\n# 'data.frame': 18 obs. of  4 variables:\n#  $ Ambiente: Factor w/ 2 levels \"A1\",\"A2\": 1 2 1 2 1 2 1 2 1 2 ...\n#  $ Genotipo: Factor w/ 3 levels \"G1\",\"G2\",\"G3\": 1 1 2 2 3 3 1 1 2 2 ...\n#  $ Rep     : Factor w/ 3 levels \"I\",\"II\",\"III\": 1 1 1 1 1 1 2 2 2 2 ...\n#  $ Y       : num  37.1 75.7 49 43.2 37.5 ...\n```\n:::\n\n\n\\\nFrom packages\n\n\n::: {.cell hash='aula3_cache/html/unnamed-chunk-2_5471d1b487a5008b35dee921fe072614'}\n\n```{.r .cell-code}\ncars2 <- cars\nspeed <- cars2$speed\nspeed\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n [1]  4  4  7  7  8  9 10 10 10 11 11 12 12 12 12 13 13 13 13 14 14 14 14 15 15\n[26] 15 16 16 17 17 17 18 18 18 18 19 19 19 20 20 20 20 20 22 23 24 24 24 24 25\n```\n:::\n:::\n\n::: {.cell hash='aula3_cache/html/unnamed-chunk-3_beb0ee505fcb3f9f70ff12ec1ffe288c'}\n\n```{.r .cell-code}\nlibrary(r4pde)\ndf <- RustSoybean\n```\n:::\n\n\n## From Excel\n\n\n::: {.cell hash='aula3_cache/html/unnamed-chunk-4_6d084ec7e52364a968bf56ed82d25e59'}\n\n```{.r .cell-code}\nlibrary(readxl)\nmagnesio <- read_excel(\"C:dados-diversos.xlsx\")\nescala1 <- read_excel(\"C:dados-diversos.xlsx\", \"escala\")\nescala2 <- read_excel(\"C:dados-diversos.xlsx\", 2)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

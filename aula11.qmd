@@ -1,0 +1,57 @@
+---
+title: "AULA 11"
+author: "ARLAM"
+format: html
+---
+
+## Anova fatorial 
+
+```{r}
+#| warning: false
+#| message: false
+library(tidyverse)
+library(readxl)
+fungicida_vaso<-read_excel("C:dados-diversos.xlsx", "fungicida_vaso")
+
+m1<- fungicida_vaso |> 
+  mutate(inc=dis_sp/n_sp*100)
+```
+
+```{r}
+m1 |> 
+ggplot(aes(x=treat, y=inc))+
+  geom_jitter(width = 0.1)+facet_wrap(~dose)
+```
+
+```{r}
+m1<-aov(log(inc+0.5)~treat*dose, 
+        data=m1)
+summary(m1)
+
+library(performance)
+check_normality(m1)
+check_heteroscedasticity(m1)
+library(DHARMa)
+plot(simulateResiduals(m1))
+
+```
+
+```{r}
+milho3<-read_excel("C:dados-diversos.xlsx", "milho")
+m4<-aov(yield~hybrid,
+        data = milho3)
+summary(m4)
+
+```
+
+```{r}
+library(agridat)
+data(cochran.beets)
+dat = cochran.beets
+
+# P has strong effect
+libs(lattice)
+xyplot(yield ~ plants|fert, dat, main="cochran.beets") 
+
+
+```

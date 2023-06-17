@@ -1,0 +1,48 @@
+---
+title: "Aula3"
+author: "ARLAM"
+format: html
+editor_options: 
+  chunk_output_type: inline
+---
+
+# #Dataframe
+
+\## A função [`data.frame()`](https://rdrr.io/r/base/data.frame.html) cria estruturas cujas colunas podem ser valores numéricos ou caracteres. É uma estrutura muito utilizada em funções do *software R*.
+
+```{r}
+x22 <- data.frame(
+      expand.grid(Ambiente = c("A1", "A2"),
+                  Genotipo = c("G1", "G2", "G3"),
+                  Rep = c("I", "II", "III")),
+                  Y = rnorm(18, 50, 15))
+str(x22)
+# 'data.frame': 18 obs. of  4 variables:
+#  $ Ambiente: Factor w/ 2 levels "A1","A2": 1 2 1 2 1 2 1 2 1 2 ...
+#  $ Genotipo: Factor w/ 3 levels "G1","G2","G3": 1 1 2 2 3 3 1 1 2 2 ...
+#  $ Rep     : Factor w/ 3 levels "I","II","III": 1 1 1 1 1 1 2 2 2 2 ...
+#  $ Y       : num  37.1 75.7 49 43.2 37.5 ...
+```
+
+\
+From packages
+
+```{r}
+cars2 <- cars
+speed <- cars2$speed
+speed
+```
+
+```{r}
+library(r4pde)
+df <- RustSoybean
+```
+
+## From Excel
+
+```{r}
+library(readxl)
+magnesio <- read_excel("C:dados-diversos.xlsx")
+escala1 <- read_excel("C:dados-diversos.xlsx", "escala")
+escala2 <- read_excel("C:dados-diversos.xlsx", 2)
+```

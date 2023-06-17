@@ -1,0 +1,70 @@
+---
+title: "aula12"
+format: html
+editor: visual
+---
+
+```{r}
+library(readxl)
+library(tidyverse)
+
+fungicidas <- read_excel("C:dados-diversos.xlsx", "fungicida_campo")
+
+```
+
+## Modelo anova com bloco
+
+```{r}
+aov_fung <- aov(sev ~ trat + rep, data = fungicidas)
+summary(aov_fung)  
+```
+
+```{r}
+library(performance)
+check_normality(aov_fung)
+check_heteroscedasticity(aov_fung)
+
+
+library(emmeans)
+
+means_fung <- emmeans(aov_fung, ~ trat)
+library(multcomp)
+library(multcompView)
+
+cld(means_fung)
+
+plot(means_fung)+
+  coord_flip()+
+  theme_minimal()
+```
+
+## Parcela subdividida (split-plot)
+
+```{r}
+milho <- read_excel("dados-diversos.xlsx", "milho")
+
+# Base R
+# DBC
+# model <- aov(Response ~ Block*WholePlotFactor*SubPlotFactor + Error(Block/WholePlotFactor/SubPlotFactor), data = mydata)
+
+aov_milho_bloco <- aov(index ~ factor(block) + hybrid*method + Error(factor(block)/hybrid/method), data = milho)
+
+summary(aov_milho_bloco)
+
+```
+
+```{r}
+# Using lme4 library
+# Load lme4 library
+library(lme4)
+# using blocks
+milho$block <- as.factor(milho$block)
+mix2 <- lmer(sqrt(index) ~ block + hybrid*method + (1|block/hybrid), data = milho)
+library(car)
+Anova(mix2)
+check_normality(mix2)
+check_heteroscedasticity(mix2)
+means_mix2 <- emmeans(mix2, ~ hybrid | method)
+means_mix2
+cld(means_mix2)
+```

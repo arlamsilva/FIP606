@@ -1,0 +1,104 @@
+---
+title: "Aula6"
+author: "ARLAM"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+# Os gráficos de dispersão ou Scatter plot são representações gráficas do relacionamento entre duas variáveis numéricas. O Scatter plot utiliza pontos para representar essa relação, cada ponto representa o valor de uma variável no eixo horizontal e o valor de outra variável no eixo vertical.
+
+```{r}
+library(readxl)
+library(tidyverse)
+fungicida <- read_excel("dados-diversos.xlsx", "fungicida_campo")
+head(fungicida)
+
+```
+
+```{r}
+fungicida |> 
+  ggplot(aes(trat, yld))+
+  geom_jitter(width = 0.1, 
+              color = "gray60")+
+  stat_summary(fun.data  = mean_se, 
+               color = "red")
+```
+
+```{r}
+library(ggthemes)
+fungicida |> 
+  ggplot(aes(sev, yld))+
+  geom_point(size = 3, 
+             color = "gray50")+
+  scale_color_colorblind()+
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "black",
+              linetype = "solid",
+              size = 1)
+```
+
+## Experimento fatorial
+
+```{r}
+milho <- read_excel("C:dados-diversos.xlsx",
+                    "milho")
+```
+
+```{r}
+milho |> 
+  ggplot(aes(method, index,
+             color = method))+
+  geom_jitter(width = 0.1)+
+  facet_grid(~hybrid)
+```
+
+## Histograma é um gráfico usado para representar a distribuição de frequência de alguns pontos de dados de uma única variável. Os histogramas geralmente classificam os dados em vários “compartimentos” ou “grupos de intervalo” e contam quantos pontos de dados pertencem a cada um desses compartimentos.
+
+```{r}
+y <- milho |> 
+  ggplot(aes(x = yield))+
+  geom_histogram(bins = 10,
+                 color = "black", fill = "green")
+
+i <- milho |> 
+  ggplot(aes(x = index))+
+  geom_histogram(bins = 10,
+                 color = "black", fill = "green")
+
+library(patchwork)
+(y + i) +
+  plot_annotation(tag_levels = "A")
+ggsave("figs/histograms.png", bg = "white")
+
+```
+
+## Gráfico de densidade
+#Os gráficos de densidade, também conhecidos como curvas de densidade suavizadas (smooth density), são esteticamente mais atraentes que os histogramas. Abaixo, vemos um gráfico de densidade para nossos dados de altura:
+
+```{r}
+milho |> 
+  ggplot(aes(x = yield))+
+  geom_density()
+```
+
+## Formato largo para longo
+#No formato amplo (wide format), as respostas de um mesmo indivíduos estarão em uma única linha e cada resposta estará em uma coluna separada.
+#No formato longo (long format), cada linha é um ponto de tempo por assunto. Portanto, cada sujeito (condado) terá dados em várias linhas. Todas as variáveis que não mudam ao longo do tempo terão o mesmo valor em todas as linhas.
+
+```{r}
+
+insect <- read_excel("C:dados-diversos.xlsx",
+                   "mortalidade")
+insect |> 
+  pivot_longer(2:3, 
+               names_to = "status",
+               values_to = "value") |> 
+  ggplot(aes(inseticida, value, 
+             fill = status))+
+  geom_col()
+  
+
+
+```

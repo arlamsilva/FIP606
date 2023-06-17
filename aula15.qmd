@@ -1,0 +1,81 @@
+---
+title: "Aula15"
+author: "ARLAM"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+##TABALEAS DE CONTIGÊNCIA
+
+#Vamos utilizar aqui os dados milsa de Bussab & Morettin discutidos na Sessão 8.2 e que podem ser obtidos conforme comando abaixo. Repetimos aqui o preparo inicial dos dados convertendo as variáveis categóricas em fatores do R e criando a variável idade.
+
+```{r}
+  milsa <- read.table("http://www.leg.ufpr.br/~paulojus/dados/milsa.dat",
+       head = T)
+milsa <- transform(milsa, civil = factor(civil, label = c("solteiro",
+  "casado"), levels = 1:2), instrucao = factor(instrucao, label = c("1oGrau",
+       "2oGrau", "Superior"), lev = 1:3, ord = T), regiao = factor(regiao,
+      label = c("capital", "interior", "outro"), lev = c(2, 1,
+        3)))
+   milsa <- transform(milsa, idade = ano + mes/12)
+   names(milsa)
+   
+   
+
+```
+
+
+#Tabelas de contingência podem ser obtidas com as frequências de ocorrência dos cruzamentos das variáveis. A seguir mostramos algumas opções da vizualização dos resultados usando a função table() e a função ftable(). As funções retornam as tabelas de contingência em um objeto que pode ser uma matrix, no caso do cruzamento de duas variáveis, ou de forma mais geral, na forma de um array, onde o número de dimensões é igual ao número de variáveis. Entretanto a classe do objeto resultante vai depender da função utilizada. Neste caso, para o cruzamento de apenas duas variáveis, os resultados são exibidos de forma semelhante. No exemplo consideram-se as variáveis civil e instrucao que situadas nas colunas 2 e 3 do data-frame.
+
+```{r}
+
+    t1 <- table(milsa[c(2, 3)])
+    
+    t1
+    
+    t1f <- ftable(milsa[c(2, 3)])
+   t1f
+   
+   
+   sapply(list(t1, t1f), class)
+   
+   sapply(list(t1, t1f), is.matrix)
+   
+   sapply(list(t1, t1f), is.array)
+
+```
+
+#Ambas funções possuem o argumento dnn que pode ser usado para sobrescrever os nomes das dimensões do objeto resultante.
+
+```{r}
+dimnames(t1)
+
+t1 <- table(milsa[c(2, 3)], dnn = c("Estado Civil", "Nível de Instrução"))
+ dimnames(t1)
+ 
+ t1f <- table(milsa[c(2, 3)], dnn = c("Estado Civil", "Nível de Instrução"))
+
+```
+
+#As diferenças na forma de exibir os resultados são mais claras considerando-se o cruzamento de três ou mais variáveis. Enquanto table() vai exibir um array da forma usual, mostrando as várias camadas separadamente, ftable() irá arranjar a tabela de forma plana, em uma visualização mais adequada para a leitura dos dados. Vamos considerar o cruzamento das variáveis civil, instrucao e regiao situadas nas colunas 2, 3 e 8 do data-frame.
+
+```{r}
+t2 <- with(milsa, table(civil, instrucao, regiao))
+t2
+
+ t2f <- with(milsa, ftable(civil, instrucao, regiao))
+ t2f
+```
+
+#
+Enquanto que o objeto retornado por table() não é uma matrix, mas sim um array de três dimensões, por serem três variáveis. A dimensão do array é de 2 × 3 × 3 por haver 2 estados civis, 3 níveis de instrução e 3 regiões. Já o objeto retornado por ftable() ainda é uma matriz, neste caso de dimensão 6 × 3 onde 6 = 2 × 3 indicando o produto do número de nívies das duas primeiras variáveis.
+
+```{r}
+sapply(list(t2, t2f), is.matrix)
+
+sapply(list(t2, t2f), is.array)
+
+sapply(list(t2, t2f), dim)
+```
+

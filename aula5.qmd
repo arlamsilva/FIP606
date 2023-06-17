@@ -1,0 +1,97 @@
+---
+title: "Aula5"
+author: "ARLAM"
+format: html
+---
+
+# Segundo plot
+
+## Importa dados
+
+```{r}
+library(tidyverse)
+library(readxl)
+mg <- read_excel("C:dados-diversos.xlsx")
+```
+
+## Visualiza
+
+```{r}
+p_box <- mg |> 
+  ggplot(aes(trat, comp))+
+  #geom_point()+
+  geom_boxplot(outlier.color = NA,
+               fill = "orange",
+               size = 0.5,
+               width = 0.4)+
+  geom_jitter(width = 0.1, 
+              height = 0,
+              size =2,
+              color = "black")+
+  scale_y_continuous(limits = c(7,19),
+                     n.breaks = 6)+
+  labs(y = "Lesion size (mm)",
+       x = " ")+
+  theme_bw()
+p_box
+ggsave("figs/plot2.png",
+         width = 4,
+       height = 4,
+       bg = "white")
+
+```
+
+```{r}
+library(ggthemes)
+p_means <- mg |> 
+  group_by(trat) |> 
+  summarise(comp_mean = mean(comp),
+            comp_sd = sd(comp)) |> 
+  ggplot(aes(trat, comp_mean))+
+  #geom_col(fill = "orange",
+   #        width = 0.5)+
+  geom_point()+
+  scale_y_continuous(limits = c(7,18),
+                     n.breaks = 6)+
+  geom_errorbar(aes(ymin = comp_mean - comp_sd , 
+                    ymax = comp_mean + comp_sd,
+                    width = 0.05))+
+  theme_bw()+
+  labs(y = "Lesion size (mm)",
+       x = " ")
+p_means
+ggsave("figs/mean_sd.png",
+       width = 4,
+       height = 4,
+       bg = "white")
+```
+
+## composição de plots
+
+```{r}
+library(patchwork)
+(p_box | p_means) +
+  plot_annotation(tag_levels = 'A',
+                  title = 'Gráficos que impressionam')
+ggsave("figs/combined.png")
+
+```
+
+```{r}
+survey <- read_excel("C:dados-diversos.xlsx",
+                     sheet = "survey")
+
+survey |> 
+  filter(state == "RS") |> 
+  count(species, residue) |> 
+  ggplot(aes(species, n))+
+  geom_col(width = 0.4, 
+           fill = "steelblue")+
+   coord_flip()+
+  facet_wrap(~residue, ncol = 1)+
+  labs(x = "", y = "Number of isolates",
+       title = "Horizontal bar plot",
+       subtitle = "Using ggplot")+
+  theme_bw()
+ggsave("figs/barplot.png", bg = "white")
+```

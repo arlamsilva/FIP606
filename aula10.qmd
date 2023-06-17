@@ -1,0 +1,196 @@
+---
+title: "Aula10"
+author: "ARLAM"
+---
+
+# Três ou mais tratamentos
+
+## Anova 1 fator
+
+Experimento com um fator e em delineamento inteiramente casualizado para comparar o crescimento micelial de diferentes espécies de um fungo fitopatogênico. A resposta a ser estudada é a TCM = taxa de crescimento micelial.
+
+### Preparo 
+
+```{r}
+library(readxl)
+library(tidyverse)
+micelial <- read_excel("dados-diversos.xlsx", "micelial")
+head(micelial)
+```
+
+```{r}
+micelial %>%
+  ggplot(aes(especie, tcm)) +
+  geom_boxplot()
+```
+
+### Premissas 
+
+### Modelo usando `aov()`
+
+```{r}
+aov1 <- aov(tcm ~ especie, 
+            data = micelial)
+summary(aov1)
+
+library(performance)
+check_heteroscedasticity(aov1)
+check_normality(aov1)
+library(DHARMa)
+plot(simulateResiduals(aov1))
+
+# teste de normalidade
+hist(aov1$residuals)
+qqnorm(aov1$residuals)
+qqline(aov1$residuals)
+shapiro.test(aov1$residuals)
+
+
+```
+
+
+
+
+#### Interpretação
+
+Premissas da anova atendidas. Efeito não significativo de espécies. 
+
+
+## E quanto não atende às premissas?
+
+Efeito de inseticida na mortalidade de insetos (Beall, 1942). The Transformation of data from entomological field experiments, Biometrika, 29, 243–262. Dados no pacote "datasets" do R. data(InsectSprays)
+
+```{r}
+insects <- tbl_df(InsectSprays) |> 
+  select(spray, count)
+```
+
+```{r}
+insects %>%
+  ggplot(aes(spray, count))+
+  geom_boxplot() 
+```
+
+#### Anova paramétrica
+
+
+```{r}
+aov2 <- aov(count ~ spray, data = insects)
+summary(aov2)
+check_normality(aov2)
+check_heteroscedasticity(aov2)
+plot(simulateResiduals(aov2))
+library(emmeans)
+aov2_means <- emmeans(aov2, ~ spray,
+                      type = "response")
+aov2_means
+pwpm(aov2_means)
+library(multcomp)
+library(multcompView)
+cld(aov2_means)
+
+
+
+```
+
+
+Qualidade ajuste do modelo
+
+```{r}
+
+# não paramétrico
+kruskal.test(count ~ spray, data = insects)
+library(agricolae)
+kruskal(insects$count, insects$spray, 
+        console = TRUE)
+
+
+```
+
+# Modelo linear generalizado
+
+```{r}
+glm1 <- glm(count ~ spray,
+  data = insects,
+  family = poisson(link = "identity"))
+plot(simulateResiduals(glm1))
+summary(glm1)
+glm1_means <- emmeans(glm1, ~ spray)
+cld(glm1_means)
+```
+
+
+
+####  Anova não paramétrica
+
+```{r}
+
+insects
+kruskal.test(count ~ spray, data = insects)
+library(agricolae)
+attach(insects)
+kruskal(insects$count, insects$spray, console = TRUE)
+```
+
+
+#### GLM família poisson
+
+```{r}
+# distribuição da resposta
+attach(insects)
+insects
+hist(count)
+```
+
+
+```{r}
+# modelo linear generalizado
+m2 <- lm(count ~ spray, data = insects)
+summary(m2)
+
+anova(m2)
+
+m4 <- glm(count ~ spray,
+  data = insects,
+  family = poisson(link = "identity")
+)
+
+summary(m4)
+anova(m4)
+hist(residuals(m2))
+hist(residuals(m4))
+```
+
+```{r}
+# resultados extraidos da lista
+library(broom)
+tidy(m4)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+# ajuste do modelo
+library(boot)
+m4.diag <- glm.diag(m4)
+glm.diag.plots(m4, glm.diag(m4))
+```
+
+Comparação de médias
+
+```{r, message=FALSE, warning=FALSE}
+library(emmeans)
+em <- emmeans(m4, ~spray)
+pwpp(em)
+multcomp::cld(em) 
+```
+
+```{r}
+
+library(lsmeans)
+library(multcomp)
+
+medias2 <- lsmeans(m4, ~spray, Letters = LETTERS)
+cld(medias2, by = NULL, Letters = LETTERS, alpha = .05)
+plot(cld(medias2, by = NULL, Letters = LETTERS, alpha = .05))
+```
+
