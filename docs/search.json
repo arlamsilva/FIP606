@@ -191,8 +191,8 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Fip606",
+    "title": "Aulas Básicas em R",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Bem-vindo ao meu website dedicado ao RStudio.\nAulas sobre análises de dados Fitopatologicos em R, minístradas pelo o professor https://github.com/emdelponte.\nR é uma linguagem de programação estatística e gráfica que vem se popularizando cada dia mais devido a sua grande utilização em análise de dados e machine learning. Em um mundo cada vez mais voltado para dados, aprender R é fundamental, sendo um diferencial em qualquer profissão, pois todas estão preocupadas com os dados que geram."
   }
 ]
