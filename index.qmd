@@ -4,7 +4,9 @@ title: "Aulas Básicas em R"
 
 Bem-vindo ao meu website dedicado ao RStudio.
 
-Aulas sobre análises de dados Fitopatologicos em R, minístradas pelo o professor emdelponte.
+Aulas sobre análises de dados Fitopatologicos em R, minístradas pelo professor <https://github.com/emdelponte>.
+
+Para saber mais acesse <https://r4ds.had.co.nz/>.
 
 Arlam Fernandes
 
