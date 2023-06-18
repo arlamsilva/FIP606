@@ -1,0 +1,7 @@
+"0","#Primeiramente vejamos um valor para lambda: aqui estamos usando um pacote de dados cars do R"
+"0",""
+"0",""
+"0","library(MASS)"
+"0",""
+"0","boxcox(dist~speed,data=cars, plotit=T, lam=seq(-1, 1, 1/10))"
+"0",""
