@@ -45,7 +45,7 @@ website:
             text: Anova fatorial
           - href: aula12.qmd
             text: Anova em bloco (DBC)
-      - text: Regressão e Correlação
+      - text: Regr. e Correlação
         menu: 
           - href: aula13.qmd
             text: Regressão linear
@@ -53,7 +53,7 @@ website:
             text: Regressão não-linear 
           - href: aula14.qmd
             text: Análise de correlação
-      - text: Tabelas de contigência
+      - text: Tab. de contigência
         menu: 
           - href: aula15.qmd
             text: T. de contigência
